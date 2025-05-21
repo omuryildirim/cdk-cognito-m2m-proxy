@@ -74,7 +74,7 @@ The `CognitoM2MTokenCacheProxyProps` interface provides the following configurat
 | `stage` | string | Deployment environment (e.g., 'dev', 'staging', 'prod') | Yes |
 | `cognitoTokenEndpointUrl` | string | Full URL to your Cognito token endpoint | Yes |
 | `cacheTtl` | Duration | Time-to-live for cached tokens | Yes |
-| `cacheSize` | string | API Gateway cache size (e.g., '0.5', '1.6', etc.) | No, default: '0.5' |
+| `cacheSize` | string | API Gateway cache size in GB (e.g., "0.5", "1.6", etc.). [See AWS Docs](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html). | No, default: "0.5" |
 | `namePrefix` | string | Optional prefix for resource names | No |
 | `disableAuthorizationHeaderValidation` | boolean | Flag to disable Authorization header validation | No |
 | `customDomain` | object | Configuration for custom domain setup | No |
@@ -117,7 +117,7 @@ The `CognitoM2MWithTokenCacheProps` interface provides the following configurati
 |----------|------|-------------|----------|
 | `stage` | string | Deployment environment (e.g., 'dev', 'staging', 'prod') | Yes |
 | `cacheTtl` | Duration | Time-to-live for cached tokens | Yes |
-| `cacheSize` | string | API Gateway cache size (e.g., '0.5', '1.6', etc.) | No, default: '0.5' |
+| `cacheSize` | string | API Gateway cache size in GB (e.g., "0.5", "1.6", etc.). [See AWS Docs](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html). | No, default: "0.5" |
 | `namePrefix` | string | Optional prefix for resource names | No |
 | `userPoolProps` | CognitoUserPoolProps | Optional properties for custom Cognito User Pool settings | No |
 | `disableAuthorizationHeaderValidation` | boolean | Flag to disable Authorization header validation | No |
