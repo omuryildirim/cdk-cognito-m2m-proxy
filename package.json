@@ -1,6 +1,6 @@
 {
   "name": "cdk-cognito-m2m-proxy",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "AWS CDK construct for setting up a cached Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication",
   "scripts": {
     "build": "pnpm build:cjs && pnpm build:esm",
