@@ -70,6 +70,13 @@ export interface CognitoM2MTokenCacheProps {
      */
     hostedZone: IHostedZone;
   };
+
+  /**
+   * Flag to disable Authorization header validation.
+   * OAuth2 standard recommends using the Authorization header for client credentials.
+   * Refer to: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
+   */
+  disableAuthorizationHeaderValidation?: boolean;
 }
 
 export class CognitoM2MWithTokenCache extends Construct {
@@ -79,7 +86,15 @@ export class CognitoM2MWithTokenCache extends Construct {
   constructor(scope: Construct, id: string, props: CognitoM2MTokenCacheProps) {
     super(scope, id);
 
-    const { stage, cacheTtl, customCacheAPIDomain, namePrefix, cacheSize, userPoolProps } = props;
+    const {
+      stage,
+      cacheTtl,
+      customCacheAPIDomain,
+      namePrefix,
+      cacheSize,
+      userPoolProps,
+      disableAuthorizationHeaderValidation
+    } = props;
 
     // Resolve the name prefix (use empty string if not provided)
     const resolvedNamePrefix = namePrefix ? `${namePrefix}-` : '';
@@ -115,7 +130,8 @@ export class CognitoM2MWithTokenCache extends Construct {
       cacheTtl,
       customDomain: customCacheAPIDomain,
       namePrefix,
-      cacheSize
+      cacheSize,
+      disableAuthorizationHeaderValidation
     });
   }
 }
