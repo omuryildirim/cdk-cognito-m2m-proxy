@@ -5,6 +5,11 @@ on:
     branches:
       - main
       - master
+      
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
 
 jobs:
   release:
