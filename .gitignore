@@ -1,0 +1,37 @@
+# Node.js
+node_modules/
+pnpm-debug.log*
+
+# TypeScript
+dist/
+build/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional: coverage reports
+coverage/
+.nyc_output/
+
+# Optional: CDK context
+cdk.out/
+cdk.context.json
+
+# Optional: package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
