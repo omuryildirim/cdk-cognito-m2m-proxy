@@ -1,13 +1,16 @@
 {
   "name": "cdk-cognito-m2m-proxy",
   "version": "0.0.0",
-  "description": "AWS CDK construct for setting up an Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication. Simplifies building secure M2M APIs in your AWS infrastructure as code projects.",
+  "description": "AWS CDK construct for setting up an Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication",
   "scripts": {
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "rimraf ./dist-cjs && tsc --project ./tsconfig-build.json --outDir dist-cjs --module CommonJS",
+    "build:esm": "rimraf ./dist-esm && tsc --project ./tsconfig-build.json --outDir dist-esm --module ES6 --moduleResolution Node",
     "lint": "biome check .",
     "lint:fix": "biome check --write --unsafe .",
     "test": "vitest --coverage --silent --watch=false"
   },
-  "author": "",
+  "author": "@omuryildirim",
   "license": "MIT",
   "keywords": [
     "aws",
@@ -33,6 +36,7 @@
     "aws-cdk": "2.1013.0",
     "aws-cdk-lib": "2.193.0",
     "constructs": "10.4.2",
+    "rimraf": "6.0.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3",
     "vitest": "3.1.2"
