@@ -1,1 +1,1 @@
-export const L3 = 'L3';
+export * from './CognitoM2MWithTokenCache';

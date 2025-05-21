@@ -1,7 +1,9 @@
-import type { Duration } from 'aws-cdk-lib';
+import { type Duration, Stack } from 'aws-cdk-lib';
 import type { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import type { UserPoolProps } from 'aws-cdk-lib/aws-cognito';
+import { UserPool, UserPoolDomain, type UserPoolProps } from 'aws-cdk-lib/aws-cognito';
 import type { IHostedZone } from 'aws-cdk-lib/aws-route53';
+import { Construct } from 'constructs';
+import { CognitoM2MTokenCacheProxy } from '../L2/CognitoM2MTokenCacheProxy';
 
 /**
  * Properties for configuring a Cognito user pool with machine-to-machine (M2M)
@@ -68,4 +70,52 @@ export interface CognitoM2MTokenCacheProps {
      */
     hostedZone: IHostedZone;
   };
+}
+
+export class CognitoM2MWithTokenCache extends Construct {
+  public readonly userPool: UserPool;
+  public readonly userPoolDomain: UserPoolDomain;
+
+  constructor(scope: Construct, id: string, props: CognitoM2MTokenCacheProps) {
+    super(scope, id);
+
+    const { stage, cacheTtl, customCacheAPIDomain, namePrefix, cacheSize, userPoolProps } = props;
+
+    // Resolve the name prefix (use empty string if not provided)
+    const resolvedNamePrefix = namePrefix ? `${namePrefix}-` : '';
+
+    // Create a new Cognito User Pool and domain
+    this.userPool = new UserPool(this, `${resolvedNamePrefix}CognitoUserPool-${stage}`, {
+      userPoolName: `${resolvedNamePrefix}CognitoUserPool-${stage}`,
+      ...userPoolProps
+    });
+
+    // Create a new Cognito User Pool Domain with a custom domain prefix
+    this.userPoolDomain = new UserPoolDomain(
+      this,
+      `${resolvedNamePrefix}CognitoUserPoolDomain-${stage}`,
+      {
+        userPool: this.userPool,
+        cognitoDomain: {
+          domainPrefix: `${(namePrefix ?? 'default').toLowerCase()}-token-cache-${stage.toLowerCase()}`
+        }
+      }
+    );
+
+    // Get the region from the stack
+    const region = Stack.of(this).region;
+
+    // Build the user pool domain URL
+    const userPoolDomainUrl = `https://${this.userPoolDomain.domainName}.auth.${region}.amazoncognito.com`;
+
+    // Use the CognitoApiGatewayProxy construct
+    new CognitoM2MTokenCacheProxy(this, `${resolvedNamePrefix}ApiGatewayProxy-${stage}`, {
+      stage,
+      cognitoTokenEndpointUrl: `${userPoolDomainUrl}/oauth2/token`,
+      cacheTtl,
+      customDomain: customCacheAPIDomain,
+      namePrefix,
+      cacheSize
+    });
+  }
 }
