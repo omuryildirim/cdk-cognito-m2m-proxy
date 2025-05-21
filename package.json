@@ -1,7 +1,7 @@
 {
   "name": "cdk-cognito-m2m-proxy",
   "version": "0.0.0",
-  "description": "AWS CDK construct for setting up an Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication",
+  "description": "AWS CDK construct for setting up a cached Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication",
   "scripts": {
     "build": "pnpm build:cjs && pnpm build:esm",
     "build:cjs": "rimraf ./dist-cjs && tsc --project ./tsconfig-build.json --outDir dist-cjs --module CommonJS",
@@ -9,9 +9,12 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write --unsafe .",
     "test": "vitest --coverage --silent --watch=false",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "bump-version": "pnpm changeset version && pnpm install --fix-lockfile && pnpm lint:fix",
+    "release": "pnpm build && pnpm changeset publish"
   },
-  "author": "@omuryildirim",
+  "author": "Omur Yildirim <omuryildirim@users.noreply.github.com> (https://github.com/omuryildirim)",
   "license": "MIT",
   "keywords": [
     "aws",
@@ -36,6 +39,8 @@
     "@vitest/coverage-v8": "3.1.2",
     "aws-cdk": "2.1013.0",
     "aws-cdk-lib": "2.193.0",
+    "@changesets/changelog-github": "0.5.1",
+    "@changesets/cli": "2.29.4",
     "constructs": "10.4.2",
     "rimraf": "6.0.1",
     "ts-node": "10.9.2",
@@ -43,9 +48,9 @@
     "vitest": "3.1.2"
   },
   "peerDependencies": {
-    "aws-cdk": "^2.83.0",
-    "aws-cdk-lib": "^2.83.0",
-    "constructs": "^10.0.125"
+    "aws-cdk": "^2.1013.0",
+    "aws-cdk-lib": "^2.193.0",
+    "constructs": "^10.4.2"
   },
   "engines": {
     "node": ">=18"
@@ -53,11 +58,21 @@
   "main": "dist-cjs/index.js",
   "types": "dist-esm/index.d.ts",
   "module": "dist-esm/index.js",
-  "files": ["dist-esm", "dist-cjs"],
+  "files": ["dist-esm", "dist-cjs", "README.md", "LICENSE"],
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git@github.com:omuryildirim/cdk-cognito-m2m-proxy.git"
+    "url": "https://github.com/omuryildirim/cdk-cognito-m2m-proxy.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist-esm/index.js",
+      "require": "./dist-cjs/index.js",
+      "types": "./dist-esm/index.d.ts"
+    }
   },
   "packageManager": "pnpm@10.4.1"
 }

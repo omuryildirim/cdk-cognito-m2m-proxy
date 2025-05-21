@@ -1,0 +1,33 @@
+name: Release Package
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run release
+          version: pnpm bump-versions
+          commit: 'chore(release): version bump'
+          title: 'chore(release): version update'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
