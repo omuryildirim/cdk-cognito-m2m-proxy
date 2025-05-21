@@ -1,6 +1,13 @@
 import type { Duration } from 'aws-cdk-lib';
+import {
+  EndpointType,
+  HttpIntegration,
+  RequestValidator,
+  RestApi
+} from 'aws-cdk-lib/aws-apigateway';
 import type { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import type { IHostedZone } from 'aws-cdk-lib/aws-route53';
+import { CnameRecord, type IHostedZone } from 'aws-cdk-lib/aws-route53';
+import { Construct } from 'constructs';
 
 /**
  * Properties for configuring an API Gateway proxy with caching capabilities
@@ -66,4 +73,121 @@ export interface CognitoM2MTokenCacheProxyProps {
      */
     hostedZone: IHostedZone;
   };
+
+  /**
+   * Boolean flag to disable validation of the Authorization header.
+   * OAuth2 standard recommends using the Authorization header for client credentials.
+   * Refer to: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
+   */
+  disableAuthorizationHeaderValidation?: boolean;
+}
+
+export class CognitoM2MTokenCacheProxy extends Construct {
+  public readonly api: RestApi;
+
+  constructor(scope: Construct, id: string, props: CognitoM2MTokenCacheProxyProps) {
+    super(scope, id);
+
+    const {
+      stage,
+      cognitoTokenEndpointUrl,
+      cacheTtl,
+      customDomain,
+      cacheSize = '0.5',
+      namePrefix,
+      disableAuthorizationHeaderValidation
+    } = props;
+
+    const resolvedNamePrefix = namePrefix ? `${namePrefix}-` : '';
+
+    // Create the API Gateway
+    this.api = new RestApi(this, `${resolvedNamePrefix}CognitoApiProxy-${stage}`, {
+      restApiName: `${resolvedNamePrefix}Cognito Proxy (${stage})`,
+      description: 'API Gateway proxy with cache for m2m tokens for Cognito pool',
+      ...(customDomain && {
+        domainName: {
+          domainName: `${customDomain.subDomain}.${customDomain.domainName}`,
+          certificate: customDomain.certificate,
+          endpointType: EndpointType.EDGE
+        }
+      }),
+      deployOptions: {
+        stageName: stage,
+        cacheClusterEnabled: true,
+        cacheDataEncrypted: true,
+        cacheClusterSize: cacheSize,
+        cacheTtl,
+        methodOptions: {
+          '/oauth2/token/POST': {
+            cachingEnabled: true,
+            cacheTtl
+          }
+        }
+      }
+    });
+
+    // Add HTTP integration
+    const httpProxyIntegration = new HttpIntegration(cognitoTokenEndpointUrl, {
+      httpMethod: 'POST',
+      proxy: true,
+      options: {
+        cacheKeyParameters: [
+          // These cache key parameters are used to ensure that the API Gateway cache
+          // correctly differentiates between requests that may result in different
+          // Cognito tokens or responses. Caching based on these values prevents
+          // returning an incorrect token when the input parameters differ.
+          //
+          // - 'method.request.header.Authorization': Different Authorization headers (if used) could result in different tokens.
+          // - 'method.request.header.Content-Type': Some M2M token requests may vary (e.g., form vs. JSON) based on content type.
+          // - 'method.request.querystring.scope': The requested scope(s) affect the granted token's permissions and value.
+          // - 'method.request.querystring.grant_type': The OAuth2 grant type (e.g., client_credentials) determines token behavior and validity.
+          // - 'method.request.querystring.client_secret': Different client secrets may produce different tokens or errors.
+          // - 'method.request.querystring.client_id': Different client IDs (applications) will result in different tokens.
+          // - 'integration.request.querystring.bodyCacheKey': API Gateway does allow caching based on the request body. Since the body is
+          //     not available in the request parameters, we use a custom cache key to cache based on the request body.
+          'method.request.header.Authorization',
+          'method.request.header.Content-Type',
+          'method.request.querystring.scope',
+          'method.request.querystring.grant_type',
+          'method.request.querystring.client_secret',
+          'method.request.querystring.client_id',
+          'integration.request.querystring.bodyCacheKey'
+        ],
+        requestParameters: {
+          'integration.request.querystring.bodyCacheKey': 'method.request.body'
+        }
+      }
+    });
+
+    const methodOptions = {
+      requestParameters: {
+        'method.request.header.Authorization': !disableAuthorizationHeaderValidation,
+        'method.request.header.Content-Type': false,
+        'method.request.querystring.scope': false,
+        'method.request.querystring.grant_type': false,
+        'method.request.querystring.client_secret': false,
+        'method.request.querystring.client_id': false
+      },
+      ...(!disableAuthorizationHeaderValidation && {
+        requestValidator: new RequestValidator(this, `RequestValidator-${stage}`, {
+          restApi: this.api,
+          requestValidatorName: `${resolvedNamePrefix}M2MTokenRequestValidator-${stage}`,
+          validateRequestParameters: true,
+          validateRequestBody: false
+        })
+      })
+    };
+
+    const oauthTokenResource = this.api.root.addResource('oauth2').addResource('token');
+    oauthTokenResource.addMethod('POST', httpProxyIntegration, methodOptions);
+
+    // Add a cname record for the custom domain
+    if (customDomain && this.api.domainName) {
+      new CnameRecord(this, 'CustomDomainAliasRecord', {
+        recordName: customDomain.subDomain,
+        zone: customDomain.hostedZone,
+        domainName: this.api.domainName.domainNameAliasDomainName
+      });
+    }
+  }
 }
