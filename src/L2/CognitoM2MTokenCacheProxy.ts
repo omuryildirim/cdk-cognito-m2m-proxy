@@ -75,7 +75,7 @@ export interface CognitoM2MTokenCacheProxyProps {
   };
 
   /**
-   * Boolean flag to disable validation of the Authorization header.
+   * Flag to disable Authorization header validation.
    * OAuth2 standard recommends using the Authorization header for client credentials.
    * Refer to: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
    */
