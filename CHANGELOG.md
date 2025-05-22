@@ -1,5 +1,11 @@
 # cdk-cognito-m2m-proxy
 
+## 1.0.0
+
+### Major Changes
+
+- a10737f: Introduces a breaking change by renaming the disableAuthorizationHeaderValidation property to enableAuthorizationHeaderValidation and updates the corresponding logic to align with the new property name
+
 ## 0.1.1
 
 ### Patch Changes
