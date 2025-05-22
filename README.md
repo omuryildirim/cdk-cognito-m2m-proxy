@@ -101,17 +101,11 @@ The `CognitoM2MTokenCacheProxyProps` interface provides the following configurat
 | `cacheTtl` | Duration | Time-to-live for cached tokens | Yes |
 | `cacheSize` | string | API Gateway cache size in GB (e.g., "0.5", "1.6", etc.). [See AWS Docs](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html). | No, default: "0.5" |
 | `namePrefix` | string | Optional prefix for resource names | No |
-| `disableAuthorizationHeaderValidation` | boolean | Flag to disable Authorization header validation | No |
+| `enableAuthorizationHeaderValidation` | boolean | Flag to enable Authorization header validation | No |
 | `customDomain` | object | Configuration for custom domain setup | No |
 
-The `customDomain` configuration accepts:
-
-| Property | Type | Description | Required |
-|----------|------|-------------|----------|
-| `domainName` | string | The root domain for the API Gateway | Yes |
-| `subDomain` | string | The subdomain for the API Gateway. Used to generate the full URL and CNAME record | Yes |
-| `certificate` | Certificate | ACM certificate for the custom domain. Must be valid for the combination of subdomain and domain | Yes |
-| `hostedZone` | IHostedZone | Route 53 hosted zone for the domain | Yes |
+> [!Tip]
+OAuth2 standard recommends using the Authorization header for client credentials. Refer to [RFC6749](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1). Using `enableAuthorizationHeaderValidation` will enforce Authorization header. 
 
 ---
 
@@ -145,17 +139,11 @@ The `CognitoM2MWithTokenCacheProps` interface provides the following configurati
 | `cacheSize` | string | API Gateway cache size in GB (e.g., "0.5", "1.6", etc.). [See AWS Docs](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html). | No, default: "0.5" |
 | `namePrefix` | string | Optional prefix for resource names | No |
 | `userPoolProps` | CognitoUserPoolProps | Optional properties for custom Cognito User Pool settings | No |
-| `disableAuthorizationHeaderValidation` | boolean | Flag to disable Authorization header validation | No |
+| `enableAuthorizationHeaderValidation` | boolean | Flag to enable Authorization header validation | No |
 | `customCacheAPIDomain` | object | Configuration for custom domain setup | No |
 
-The `customCacheAPIDomain` configuration accepts:
-
-| Property | Type | Description | Required |
-|----------|------|-------------|----------|
-| `domainName` | string | The root domain for the API Gateway | Yes |
-| `subDomain` | string | The subdomain for the API Gateway. Used to generate the full URL and CNAME record | Yes |
-| `certificate` | Certificate | ACM certificate for the custom domain. Must be valid for the combination of subdomain and domain | Yes |
-| `hostedZone` | IHostedZone | Route 53 hosted zone for the domain | Yes |
+> [!Tip]
+OAuth2 standard recommends using the Authorization header for client credentials. Refer to [RFC6749](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1). Using `enableAuthorizationHeaderValidation` will enforce Authorization header. 
 
 The construct exposes the user pool so it can be used to create app clients, resource servers, etc., as you normally would.
 
