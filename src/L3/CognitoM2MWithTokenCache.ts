@@ -76,7 +76,7 @@ export interface CognitoM2MTokenCacheProps {
    * OAuth2 standard recommends using the Authorization header for client credentials.
    * Refer to: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
    */
-  disableAuthorizationHeaderValidation?: boolean;
+  enableAuthorizationHeaderValidation?: boolean;
 }
 
 export class CognitoM2MWithTokenCache extends Construct {
@@ -93,7 +93,7 @@ export class CognitoM2MWithTokenCache extends Construct {
       namePrefix,
       cacheSize,
       userPoolProps,
-      disableAuthorizationHeaderValidation
+      enableAuthorizationHeaderValidation
     } = props;
 
     // Resolve the name prefix (use empty string if not provided)
@@ -131,7 +131,7 @@ export class CognitoM2MWithTokenCache extends Construct {
       customDomain: customCacheAPIDomain,
       namePrefix,
       cacheSize,
-      disableAuthorizationHeaderValidation
+      enableAuthorizationHeaderValidation
     });
   }
 }

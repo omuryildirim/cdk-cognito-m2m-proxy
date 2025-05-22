@@ -92,7 +92,7 @@ describe('CognitoM2MTokenCacheProxy', () => {
       stage: 'test',
       cognitoTokenEndpointUrl: 'https://example.auth.us-east-1.amazoncognito.com/oauth2/token',
       cacheTtl: Duration.minutes(5),
-      disableAuthorizationHeaderValidation: true
+      enableAuthorizationHeaderValidation: false
     });
 
     const template = Template.fromStack(stack);
@@ -117,8 +117,8 @@ describe('CognitoM2MTokenCacheProxy', () => {
     new CognitoM2MTokenCacheProxy(stack, 'Proxy', {
       stage: 'test',
       cognitoTokenEndpointUrl: 'https://example.auth.us-east-1.amazoncognito.com/oauth2/token',
-      cacheTtl: Duration.minutes(5)
-      // disableAuthorizationHeaderValidation is omitted (defaults to false)
+      cacheTtl: Duration.minutes(5),
+      enableAuthorizationHeaderValidation: true
     });
 
     const template = Template.fromStack(stack);

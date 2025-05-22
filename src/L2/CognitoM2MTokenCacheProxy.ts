@@ -75,11 +75,11 @@ export interface CognitoM2MTokenCacheProxyProps {
   };
 
   /**
-   * Flag to disable Authorization header validation.
+   * Flag to enable Authorization header validation.
    * OAuth2 standard recommends using the Authorization header for client credentials.
    * Refer to: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
    */
-  disableAuthorizationHeaderValidation?: boolean;
+  enableAuthorizationHeaderValidation?: boolean;
 }
 
 export class CognitoM2MTokenCacheProxy extends Construct {
@@ -95,7 +95,7 @@ export class CognitoM2MTokenCacheProxy extends Construct {
       customDomain,
       cacheSize = '0.5',
       namePrefix,
-      disableAuthorizationHeaderValidation
+      enableAuthorizationHeaderValidation
     } = props;
 
     const resolvedNamePrefix = namePrefix ? `${namePrefix}-` : '';
@@ -161,14 +161,14 @@ export class CognitoM2MTokenCacheProxy extends Construct {
 
     const methodOptions = {
       requestParameters: {
-        'method.request.header.Authorization': !disableAuthorizationHeaderValidation,
+        'method.request.header.Authorization': !!enableAuthorizationHeaderValidation,
         'method.request.header.Content-Type': false,
         'method.request.querystring.scope': false,
         'method.request.querystring.grant_type': false,
         'method.request.querystring.client_secret': false,
         'method.request.querystring.client_id': false
       },
-      ...(!disableAuthorizationHeaderValidation && {
+      ...(enableAuthorizationHeaderValidation && {
         requestValidator: new RequestValidator(this, `RequestValidator-${stage}`, {
           restApi: this.api,
           requestValidatorName: `${resolvedNamePrefix}M2MTokenRequestValidator-${stage}`,
