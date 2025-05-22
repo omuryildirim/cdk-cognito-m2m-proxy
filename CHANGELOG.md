@@ -1,5 +1,11 @@
 # cdk-cognito-m2m-proxy
 
+## 0.1.1
+
+### Patch Changes
+
+- 06c4594: Fixing exports issue
+
 ## 0.1.0
 
 ### Minor Changes
