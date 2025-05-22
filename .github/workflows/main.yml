@@ -12,19 +12,33 @@ permissions:
   packages: write
 
 jobs:
-  release:
+  build-test:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-test
+        name: Build & Test
+
+  publish:
+    name: Publish release
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
         with:
           version: 10.4.1
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         with:
