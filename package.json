@@ -67,12 +67,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "exports": {
-    ".": {
-      "import": "./dist-esm/index.js",
-      "require": "./dist-cjs/index.js",
-      "types": "./dist-esm/index.d.ts"
-    }
-  },
   "packageManager": "pnpm@10.4.1"
 }
