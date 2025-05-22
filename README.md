@@ -30,6 +30,31 @@ This package provides two AWS CDK constructs that implement token caching via an
 
 When using these constructs, client applications should direct their token requests to the API Gateway endpoint rather than directly to Cognito:
 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant client as Client
+    participant proxy as API Gateway (proxy)
+    participant cognito as Cognito User Pool
+    participant api as Protected API
+
+    %% Step 1: Client requests token for M2M
+    client->>proxy: Request Cognito Token
+    alt token not cached
+        proxy->>cognito: Authenticate (M2M credentials)
+        cognito-->>proxy: ID/Access Token
+        proxy-->>proxy: Cache token
+        proxy-->>client: Token
+    else token is cached
+        proxy-->>proxy: Retrieve token from cache
+        proxy-->>client: Token from cache
+    end
+
+    %% Step 2: Client uses token to call protected API directly
+    client->>api: Call Protected Endpoint (with Cognito token)
+    api-->>client: API Response
+```
+
 1. The client requests a token from the API Gateway endpoint.
 2. The API Gateway checks if a matching token response is already cached:
    1. If cached: Returns the cached token (no Cognito charges incurred).
