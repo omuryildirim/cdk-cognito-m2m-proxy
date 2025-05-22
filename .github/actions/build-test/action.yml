@@ -1,0 +1,33 @@
+name: Build and Test
+description: Builds and Tests the application
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.4.1
+
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Lint
+      run: pnpm lint
+      shell: bash
+
+    - name: Build
+      run: pnpm build
+      shell: bash
+
+    - name: Test
+      run: pnpm test
+      shell: bash
