@@ -1,19 +1,43 @@
 # cdk-cognito-m2m-proxy
 
-AWS CDK construct for setting up a cached Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication.
+[AWS CDK construct package](https://www.npmjs.com/package/cdk-cognito-m2m-proxy) for setting up a cached Amazon API Gateway proxy endpoint with Cognito machine-to-machine (M2M) authentication.
 
-- [cdk-cognito-m2m-proxy](#cdk-cognito-m2m-proxy)
-  - [Introduction](#introduction)
-      - [Token Request Flow](#token-request-flow)
-  - [Constructs](#constructs)
-    - [L2: CognitoM2MTokenCacheProxy](#l2-cognitom2mtokencacheproxy)
-      - [Example Usage](#example-usage)
-      - [Configuration Options](#configuration-options)
-    - [L3: CognitoM2MWithTokenCache](#l3-cognitom2mwithtokencache)
-      - [Example Usage](#example-usage-1)
-      - [Configuration Options](#configuration-options-1)
-  - [Cache Considerations](#cache-considerations)
-  - [Cache Keys](#cache-keys)
+- [Getting started](#getting-started)  
+- [Introduction](#introduction)
+    - [Token Request Flow](#token-request-flow)
+- [Constructs](#constructs)
+  - [L2: CognitoM2MTokenCacheProxy](#l2-cognitom2mtokencacheproxy)
+    - [Example Usage](#example-usage)
+    - [Configuration Options](#configuration-options)
+  - [L3: CognitoM2MWithTokenCache](#l3-cognitom2mwithtokencache)
+    - [Example Usage](#example-usage-1)
+    - [Configuration Options](#configuration-options-1)
+- [Cache Considerations](#cache-considerations)
+- [Cache Keys](#cache-keys)
+ 
+## Getting Started
+
+### Installation
+
+To use `cdk-cognito-m2m-proxy` in your AWS CDK TypeScript project, install it via npm:
+
+```bash
+npm install --save-dev cdk-cognito-m2m-proxy
+```
+
+This package has the following peer dependencies, which must also be installed in your project:
+
+- aws-cdk (^2.1013.0)
+- aws-cdk-lib (^2.193.0)
+- constructs (^10.4.2)
+You can install them together using:
+
+```bash
+npm install --save-dev aws-cdk@^2.1013.0 aws-cdk-lib@^2.193.0 constructs@^10.4.2
+```
+
+### Usage
+For detailed example usage, please refer to the [L2 construct usage](#example-usage) and [L3 construct usage](#example-usage-1) sections below.
 
 ## Introduction
 
