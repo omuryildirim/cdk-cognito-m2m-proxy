@@ -33,19 +33,19 @@
   ],
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@commitlint/cli": "19.8.0",
-    "@commitlint/config-conventional": "19.8.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
     "@types/node": "22.15.3",
-    "@vitest/coverage-v8": "3.1.2",
-    "aws-cdk": "2.1013.0",
-    "aws-cdk-lib": "2.193.0",
+    "@vitest/coverage-v8": "3.2.3",
+    "aws-cdk": "2.1018.0",
+    "aws-cdk-lib": "2.200.1",
     "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "2.29.4",
     "constructs": "10.4.2",
     "rimraf": "6.0.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3",
-    "vitest": "3.1.2"
+    "vitest": "3.2.3"
   },
   "peerDependencies": {
     "aws-cdk": "^2.1013.0",
