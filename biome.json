@@ -1,38 +1,46 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
   "files": {
-    "ignore": [
-      "coverage/**",
-      "node_modules",
-      "dist",
-      "*.d.ts",
-      "*.tpl.ts",
-      "test-reports/**",
-      "build/**"
-    ],
-    "include": [
-      "*.ts",
-      "*.tsx",
-      "*.json",
-      "*.md",
-      "*.yml",
-      "*.yaml",
-      "*.css",
-      "*.scss",
-      "*.less",
-      "*.graphql",
-      "*.mdx",
-      "*.html",
-      "*.vue"
+    "includes": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.md",
+      "**/*.yml",
+      "**/*.yaml",
+      "**/*.css",
+      "**/*.scss",
+      "**/*.less",
+      "**/*.graphql",
+      "**/*.mdx",
+      "**/*.html",
+      "**/*.vue",
+      "!**/coverage/**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/*.d.ts",
+      "!**/*.tpl.ts",
+      "!**/test-reports/**",
+      "!**/build/**"
     ]
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "style": {
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
+      }
     }
   },
   "formatter": {
