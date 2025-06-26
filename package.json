@@ -58,7 +58,12 @@
   "main": "dist-cjs/index.js",
   "types": "dist-esm/index.d.ts",
   "module": "dist-esm/index.js",
-  "files": ["dist-esm", "dist-cjs", "README.md", "LICENSE"],
+  "files": [
+    "dist-esm",
+    "dist-cjs",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "repository": {
     "type": "git",
