@@ -1,5 +1,11 @@
 # cdk-cognito-m2m-proxy
 
+## 1.0.1
+
+### Patch Changes
+
+- 2a49d2c: Updated several packages and added new keywords
+
 ## 1.0.0
 
 ### Major Changes
