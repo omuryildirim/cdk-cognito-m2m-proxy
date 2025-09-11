@@ -15,13 +15,13 @@
       "**/*.mdx",
       "**/*.html",
       "**/*.vue",
-      "!**/coverage/**",
+      "!**/coverage",
       "!**/node_modules",
       "!**/dist",
       "!**/*.d.ts",
       "!**/*.tpl.ts",
-      "!**/test-reports/**",
-      "!**/build/**"
+      "!**/test-reports",
+      "!**/build"
     ]
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
