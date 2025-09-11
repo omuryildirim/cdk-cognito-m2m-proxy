@@ -29,7 +29,9 @@
     "authorization",
     "typescript",
     "construct",
-    "infrastructure-as-code"
+    "infrastructure-as-code",
+    "cache",
+    "token"
   ],
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
