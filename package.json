@@ -36,7 +36,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.4",
     "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/config-conventional": "20.4.2",
     "@types/node": "24.10.1",
     "@vitest/coverage-v8": "3.2.4",
     "aws-cdk": "2.1108.0",
